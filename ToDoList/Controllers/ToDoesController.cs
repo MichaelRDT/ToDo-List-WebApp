@@ -18,10 +18,21 @@ namespace ToDoList.Controllers
         // GET: ToDoes
         public ActionResult Index()
         {
-			string currentUserId = User.Identity.GetUserId();
-			ApplicationUser currentUser = db.Users.FirstOrDefault(x=>x.Id==currentUserId);
+			return View();
+        }
 
-			return View(db.ToDos.ToList().Where(x=>x.User==currentUser));
+        private IEnumerable<ToDo> GetMyToDoes()
+        {
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = db.Users.FirstOrDefault(x => x.Id == currentUserId);
+
+            return db.ToDos.ToList().Where(x => x.User == currentUser);
+        }
+
+        public ActionResult BuildToDoTable()
+        {
+
+            return PartialView("_ToDoTable", GetMyToDoes());
         }
 
         // GET: ToDoes/Details/5
@@ -57,8 +68,7 @@ namespace ToDoList.Controllers
 				string currentUserId = User.Identity.GetUserId();
 				ApplicationUser currentUser = db.Users.FirstOrDefault
 					(x => x.Id == currentUserId);
-				toDo.User = currentUser;
-
+                toDo.User = currentUser;
 				db.ToDos.Add(toDo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
