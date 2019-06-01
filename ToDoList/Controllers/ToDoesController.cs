@@ -91,7 +91,6 @@ namespace ToDoList.Controllers
                 toDo.IsDone = false;
                 db.ToDos.Add(toDo);
                 db.SaveChanges();
-                
             }
 
             return PartialView("_ToDoTable", GetMyToDoes());
